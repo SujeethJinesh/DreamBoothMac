@@ -737,7 +737,7 @@ if __name__ == "__main__":
         trainer_kwargs["callbacks"] = [instantiate_from_config(callbacks_cfg[k]) for k in callbacks_cfg]
         trainer_kwargs["max_steps"] = trainer_opt.max_steps
 
-        trainer = Trainer(accelerator="mps", devices=1, max_epochs=3)
+        trainer = Trainer(accelerator="mps", devices=1, max_epochs=8)
         trainer.logdir = logdir  ###
 
         # data

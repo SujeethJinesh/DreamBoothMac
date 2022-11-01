@@ -229,7 +229,7 @@ class DataModuleFromConfig(pl.LightningDataModule):
         super().__init__()
         self.batch_size = batch_size
         self.dataset_configs = dict()
-        self.num_workers = num_workers if num_workers is not None else batch_size * 2
+        self.num_workers = 10
         self.use_worker_init_fn = use_worker_init_fn
         if train is not None:
             self.dataset_configs["train"] = train
@@ -588,12 +588,7 @@ if __name__ == "__main__":
         trainer_config["strategy"] = "ddp"
         for k in nondefault_trainer_args(opt):
             trainer_config[k] = getattr(opt, k)
-        if torch.cuda.is_available(): 
-            device = torch.device("cuda")
-            gpuinfo = trainer_config["gpus"]
-            print(f"Running on GPUs {gpuinfo}")
-            cpu = False
-        elif torch.backends.mps.is_built():
+        if torch.backends.mps.is_built():
             device = torch.device("mps")
             trainer_config["accelerator"] = "mps"
             print(f"Running on MPS")
@@ -750,8 +745,6 @@ if __name__ == "__main__":
         config.data.params.reg.params.data_root = opt.reg_data_root
         config.data.params.validation.params.data_root = opt.data_root
         data = instantiate_from_config(config.data)
-
-        data = instantiate_from_config(config.data)
         # NOTE according to https://pytorch-lightning.readthedocs.io/en/latest/datamodules.html
         # calling these ourselves should not be necessary but it is.
         # lightning still takes care of proper multiprocessing though
@@ -809,7 +802,9 @@ if __name__ == "__main__":
         # run
         if opt.train:
             try:
-                trainer.fit(model, data)
+              print("type of data: ", type(data))
+              trainer.fit(model, data)
+              # trainer.fit(model, datamodule=DataModuleFromConfig(10))
             except Exception:
                 melk()
                 raise

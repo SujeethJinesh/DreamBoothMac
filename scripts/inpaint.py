@@ -61,7 +61,7 @@ if __name__ == "__main__":
     model.load_state_dict(torch.load("models/ldm/inpainting_big/last.ckpt")["state_dict"],
                           strict=False)
 
-    device = torch.device("cuda") if torch.cuda.is_available() else torch.device("mps")
+    device = torch.device("mps")
     model = model.to(device)
     sampler = DDIMSampler(model)
 

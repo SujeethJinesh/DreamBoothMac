@@ -194,9 +194,7 @@ def main():
     model = load_model_from_config(config, f"{opt.ckpt}")
     #model.embedding_manager.load(opt.embedding_path)
 
-    if torch.cuda.is_available(): 
-        device = torch.device("cuda")
-    elif torch.backends.mps.is_built():
+    if torch.backends.mps.is_built():
         device = torch.device("mps")
     else :
         device = torch.device("cpu")

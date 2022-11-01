@@ -1,0 +1,7 @@
+.DS_Store
+./logs/
+./regularization_images/
+./training_images/
+	__pycache__/
+	latent_diffusion.egg-info/
+*.ckpt

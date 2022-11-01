@@ -29,7 +29,9 @@ def load_model_from_config(config, ckpt, verbose=False):
         print("unexpected keys:")
         print(u)
 
-    model.cuda()
+    # model.cuda()
+    mps_device = torch.device("mps")
+    model.to(mps_device)
     model.eval()
     return model
 
@@ -69,7 +71,7 @@ if __name__ == "__main__":
     model = load_model_from_config(config, opt.ckpt_path)  # TODO: check path
     model.embedding_manager.load(opt.embedding_path)
 
-    device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+    device = torch.device("cuda") if torch.cuda.is_available() else torch.device("mps")
     model = model.to(device)
 
     evaluator = LDMCLIPEvaluator(device)
